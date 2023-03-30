@@ -1,12 +1,14 @@
 import os
 import spikeinterface as si
 import spikeinterface.sorters as ss
+import spikeinterface.extractors as se
 import spikeinterface.preprocessing as spre
 import spikeforest as sf
 from config_classes import SpikeSortingTestsConfig, SortingConfig
+from capture_console_output import capture_console_output, setup_logger
 
 
-def run_sorting(config: SpikeSortingTestsConfig, sorting: SortingConfig):
+def perform_single_sorting(config: SpikeSortingTestsConfig, sorting: SortingConfig):
     recording = [rec for rec in config.recordings if rec.id == sorting.recording][0]
     sorter = [s for s in config.sorters if s.id == sorting.sorter][0]
 
@@ -29,17 +31,20 @@ def run_sorting(config: SpikeSortingTestsConfig, sorting: SortingConfig):
     if not os.path.exists(f'{recording_folder}/sortings'):
         os.mkdir(f'{recording_folder}/sortings')
     output_folder = f'{recording_folder}/sortings/{sorter.id}'
-    if os.path.exists(output_folder):
-        print(f'Sorting output folder already exists')
-    else:
+    if not os.path.exists(output_folder):
         os.mkdir(output_folder)
-    
-    recording_extractor: si.BaseRecording = si.load_extractor(f'{recording_folder}/recording')
 
-    ss.run_sorter(sorter.algorithm, recording=recording_extractor, output_folder=output_folder + '/output', **sorter.sorting_parameters)
+    if os.path.exists(f'{output_folder}/output'):
+        print('Sorting output already exists. Skipping.')
+    else:
+        recording_extractor: si.BaseRecording = si.load_extractor(f'{recording_folder}/recording')
+        logger = setup_logger(f'{output_folder}/output.log')
+        with capture_console_output(logger):
+            ss.run_sorter(sorter.algorithm, recording=recording_extractor, output_folder=output_folder + '/output', **sorter.sorting_parameters)
 
-    sorting_extractor = si.load_extractor(output_folder + '/output')
-    print(sorting_extractor.unit_ids)
+        sorting_extractor = se.NpzSortingExtractor(output_folder + '/output/sorter_output/firings.npz')
+        print('Unit IDs:')
+        print(sorting_extractor.unit_ids)
 
 def write_binary_recording(recording: si.BaseRecording, folder: str):
     recording.save(folder=folder, format='binary')

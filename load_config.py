@@ -1,10 +1,10 @@
 import yaml
 from jsonschema import validate, ValidationError
 import json
-from config_classes import dict_to_spike_sorting_config, SpikeSortingTestsConfig
-from run_sorting import run_sorting
+from config_classes import dict_to_spike_sorting_config
 
-def main():
+
+def load_config():
     config_file = 'spike_sorting_config.yaml'
     schema_file = 'spike_sorting_config_schema.json'
 
@@ -14,14 +14,9 @@ def main():
     if validate_config(config_data, schema_data):
         print("The configuration is valid.")
         config = dict_to_spike_sorting_config(config_data)
-        run_spike_sorting(config)
+        return config
     else:
-        print("The configuration is not valid. Please fix the errors and try again.")
-
-def run_spike_sorting(config: SpikeSortingTestsConfig):
-    for sorting in config.sortings:
-        print(f"Running spike sorting for {sorting.recording} using {sorting.sorter}")
-        run_sorting(config, sorting)
+        raise Exception("The configuration is not valid. Please fix the errors and try again.")
 
 def load_yaml_file(file_path):
     with open(file_path, 'r') as file:
@@ -38,6 +33,3 @@ def validate_config(config_data, schema_data):
     except ValidationError as e:
         print(f"Validation error: {e.message}")
         return False
-
-if __name__ == '__main__':
-    main()
