@@ -1,0 +1,87 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "recordings": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "study_name": {
+                                "type": "string"
+                            },
+                            "recording_name": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "study_name",
+                            "recording_name"
+                        ]
+                    },
+                    "notes": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "id",
+                    "type",
+                    "parameters"
+                ]
+            }
+        },
+        "sorters": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "algorithm": {
+                        "type": "string"
+                    },
+                    "sorting_parameters": {
+                        "type": "object"
+                    }
+                },
+                "required": [
+                    "id",
+                    "type",
+                    "algorithm",
+                    "sorting_parameters"
+                ]
+            }
+        },
+        "sortings": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "recording": {
+                        "type": "string"
+                    },
+                    "sorter": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "recording",
+                    "sorter"
+                ]
+            }
+        }
+    }
+}
