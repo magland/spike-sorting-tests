@@ -16,7 +16,8 @@ def extract_snippets(
     for j in range(L):
         t1 = times[j] - T1
         t2 = times[j] + T2
-        snippets[j] = traces[t1:t2]
+        if 0 <= t1 and t2 < traces.shape[0]:
+            snippets[j] = traces[t1:t2]
     return snippets
 
 def extract_snippets_in_channel_neighborhood(
