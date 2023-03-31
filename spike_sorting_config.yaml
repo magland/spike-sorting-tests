@@ -7,6 +7,13 @@ recordings:
       study_name: paired_english
       recording_name: m15_190315_152315_cell1
     notes: A good example of a ground truth unit that has similar amplitude on two channels
+  # -
+  #   id: spikeforest.paired_kampff.2014_11_25_Pair_3_0
+  #   type: spikeforest
+  #   parameters:
+  #     study_name: paired_kampff
+  #     recording_name: 2014_11_25_Pair_3_0
+  #   notes: ""
 
 # Sorters to be used in tests
 sorters:
@@ -28,5 +35,11 @@ sortings:
     sorter: mountainsort5
   -
     recording: spikeforest.paired_english.m15_190315_152315_cell1
+    sorter: kilosort2_5
+  -
+    recording: spikeforest.paired_kampff.2014_11_25_Pair_3_0
+    sorter: mountainsort5
+  -
+    recording: spikeforest.paired_kampff.2014_11_25_Pair_3_0
     sorter: kilosort2_5
   

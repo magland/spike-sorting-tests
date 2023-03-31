@@ -1,7 +1,7 @@
 import yaml
 from jsonschema import validate, ValidationError
 import json
-from config_classes import dict_to_spike_sorting_config
+from core.config_classes import dict_to_spike_sorting_config
 
 
 def load_config():

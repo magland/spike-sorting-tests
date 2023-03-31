@@ -1,7 +1,7 @@
 # execute_sortings.py
 import argparse
-from perform_single_sorting import perform_single_sorting
-from load_config import load_config
+from core.execute_single_sorting import execute_single_sorting
+from core.load_config import load_config
 
 
 def parse_arguments():
@@ -21,7 +21,8 @@ def main():
 
     for sorting in filtered_sortings:
         print(f"Running spike sorting for {sorting.recording} using {sorting.sorter}")
-        perform_single_sorting(config, sorting)
+        execute_single_sorting(config, sorting)
+        print('')
 
 if __name__ == '__main__':
     main()

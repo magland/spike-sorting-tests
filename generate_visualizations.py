@@ -10,9 +10,9 @@ import spikeinterface as si
 import spikeinterface.extractors as se
 import sortingview.views as vv
 import figurl as fg
-from load_config import load_config
-from config_classes import RecordingConfig, SortingConfig
-from extract_snippets import extract_snippets
+from core.load_config import load_config
+from core.config_classes import RecordingConfig, SortingConfig
+from core.extract_snippets import extract_snippets
 from helpers.create_autocorrelograms_view import create_autocorrelograms_view
 from helpers.compute_correlogram_data import compute_correlogram_data
 
@@ -41,7 +41,8 @@ def main():
             view = create_recording_view(recording)
             os.environ['KACHERY_STORE_FILE_DIR'] = f'{recording_visualization_folder}'
             os.environ['KACHERY_STORE_FILE_PREFIX'] = f'$dir'
-            shutil.rmtree(f'{recording_visualization_folder}/sha1')
+            if os.path.exists(f'{recording_visualization_folder}/sha1'):
+                shutil.rmtree(f'{recording_visualization_folder}/sha1')
             url_dict = view.url_dict(label=recording.id)
             view = {
                 'type': 'figurl',
@@ -52,6 +53,7 @@ def main():
                 yaml.dump(view, f)
         else:
             print(f'View already exists')
+        print('')
 
     for sorting in filtered_sortings:
         print(f"Generating visualization for {sorting.recording} and {sorting.sorter}")
@@ -64,19 +66,22 @@ def main():
             os.makedirs(sorting_visualization_folder)
         if not os.path.exists(f'{sorting_visualization_folder}/view.yaml'):
             view = create_sorting_view(sorting)
-            os.environ['KACHERY_STORE_FILE_DIR'] = f'{sorting_visualization_folder}'
-            os.environ['KACHERY_STORE_FILE_PREFIX'] = f'$dir'
-            shutil.rmtree(f'{sorting_visualization_folder}/sha1')
-            url_dict = view.url_dict(label=recording.id)
-            view = {
-                'type': 'figurl',
-                'v': url_dict['v'],
-                'd': url_dict['d']
-            }
-            with open(f'{sorting_visualization_folder}/view.yaml', 'w') as f:
-                yaml.dump(view, f)
+            if view is not None:
+                os.environ['KACHERY_STORE_FILE_DIR'] = f'{sorting_visualization_folder}'
+                os.environ['KACHERY_STORE_FILE_PREFIX'] = f'$dir'
+                if os.path.exists(f'{sorting_visualization_folder}/sha1'):
+                    shutil.rmtree(f'{sorting_visualization_folder}/sha1')
+                url_dict = view.url_dict(label=recording.id)
+                view = {
+                    'type': 'figurl',
+                    'v': url_dict['v'],
+                    'd': url_dict['d']
+                }
+                with open(f'{sorting_visualization_folder}/view.yaml', 'w') as f:
+                    yaml.dump(view, f)
         else:
             print(f'View already exists')
+        print('')
 
 def create_recording_view(recording: RecordingConfig):
     view_traces = vv.EphysTraces(
@@ -99,6 +104,14 @@ def create_sorting_view(sorting: SortingConfig):
     recording_folder = f'output/recordings/{sorting.recording}'
     sorting_folder = f'{recording_folder}/sortings/{sorting.sorter}'
     sorting_visualization_folder = f'output/visualizations/recordings/{sorting.recording}/sortings/{sorting.sorter}'
+
+    if not os.path.exists(f'{recording_folder}/recording_preprocessed'):
+        print('Preprocessed recording directory does not exist. Skipping')
+        return
+    
+    if not os.path.exists(f'{sorting_folder}/output/sorter_output/firings.npz'):
+        print('Sorting output directory does not exist. Skipping')
+        return
     
     # Load recording and sorting extractors
     recording_extractor: si.BaseRecording = si.load_extractor(f'{recording_folder}/recording_preprocessed')
