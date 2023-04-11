@@ -1,4 +1,5 @@
 import os
+import json
 import spikeinterface as si
 import spikeinterface.sorters as ss
 import spikeinterface.extractors as se
@@ -27,7 +28,7 @@ def prepare_single_recording(config: SpikeSortingTestsConfig, recording: Recordi
     if not os.path.exists(f'{recording_folder}/recording_preprocessed'):
         recording_extractor: si.BaseRecording = si.load_extractor(f'{recording_folder}/recording')
         recording_filtered = spre.bandpass_filter(recording_extractor, freq_min=300, freq_max=6000)
-        recording_preprocessed = spre.whiten(recording_filtered)
+        recording_preprocessed = spre.whiten(recording_filtered, dtype='float32')
         print('Creating recording_preprocessed directory')
         write_binary_recording(recording_preprocessed, f'{recording_folder}/recording_preprocessed')
     else:
@@ -41,6 +42,18 @@ def prepare_single_recording(config: SpikeSortingTestsConfig, recording: Recordi
             si.NpzSortingExtractor.write_sorting(sorting_true_extractor, sorting_true_folder + '/sorting.npz')
         else:
             print('sorting_true directory already exists')
+    
+    recording_info = {
+        'recording_name': sf_rec.recording_name,
+        'study_name': sf_rec.study_name,
+        'study_set_name': sf_rec.study_set_name,
+        'sampling_frequency': sf_rec.sampling_frequency,
+        'num_channels': sf_rec.num_channels,
+        'duration_sec': sf_rec.duration_sec,
+        'num_true_units': sf_rec.num_true_units,
+    }
+    with open(f'{recording_folder}/recording_info.json', 'w') as f:
+        json.dump(recording_info, f, indent=4)
 
 def write_binary_recording(recording: si.BaseRecording, folder: str):
     recording.save(folder=folder, format='binary')

@@ -47,7 +47,8 @@ def main():
             view = {
                 'type': 'figurl',
                 'v': url_dict['v'],
-                'd': url_dict['d']
+                'd': url_dict['d'],
+                'label': f'{recording.id}'
             }
             with open(f'{recording_visualization_folder}/view.yaml', 'w') as f:
                 yaml.dump(view, f)
@@ -75,7 +76,8 @@ def main():
                 view = {
                     'type': 'figurl',
                     'v': url_dict['v'],
-                    'd': url_dict['d']
+                    'd': url_dict['d'],
+                    'label': f'{sorting.sorter} {sorting.recording}'
                 }
                 with open(f'{sorting_visualization_folder}/view.yaml', 'w') as f:
                     yaml.dump(view, f)
@@ -84,21 +86,38 @@ def main():
         print('')
 
 def create_recording_view(recording: RecordingConfig):
-    view_traces = vv.EphysTraces(
-        format='spikeinterface.binary',
-        uri=f'rtcshare://recordings/{recording.id}/recording'
-    )
-    view_traces_preprocessed = vv.EphysTraces(
-        format='spikeinterface.binary',
-        uri=f'rtcshare://recordings/{recording.id}/recording_preprocessed'
-    )
-    view = vv.TabLayout(
-        items=[
-            vv.TabLayoutItem(label='Raw traces', view=view_traces),
-            vv.TabLayoutItem(label='Preprocessed traces', view=view_traces_preprocessed)
-        ]
-    )
-    return view
+    recording_folder = f'output/recordings/{recording.id}'
+    sorting_true_npz_fname = f'{recording_folder}/sorting_true/sorting.npz'
+    recording_visualization_folder = f'output/visualizations/recordings/{recording.id}'
+
+    recording_extractor: si.BaseRecording = si.load_extractor(f'{recording_folder}/recording_preprocessed')
+
+    if os.path.exists(sorting_true_npz_fname):
+        sorting_true_extractor = se.NpzSortingExtractor(sorting_true_npz_fname)
+        view = create_recording_sorting_pair_view(
+            recording_extractor=recording_extractor,
+            sorting_extractor=sorting_true_extractor,
+            sorting_json_fname=f'{recording_visualization_folder}/sorting_true.json',
+            sorting_json_uri=f'$dir/sorting_true.json',
+            recording_id=recording.id
+        )
+        return view
+    else:
+        view_traces = vv.EphysTraces(
+            format='spikeinterface.binary',
+            uri=f'rtcshare://recordings/{recording.id}/recording'
+        )
+        view_traces_preprocessed = vv.EphysTraces(
+            format='spikeinterface.binary',
+            uri=f'rtcshare://recordings/{recording.id}/recording_preprocessed'
+        )
+        view = vv.TabLayout(
+            items=[
+                vv.TabLayoutItem(label='Raw traces', view=view_traces),
+                vv.TabLayoutItem(label='Preprocessed traces', view=view_traces_preprocessed)
+            ]
+        )
+        return view
 
 def create_sorting_view(sorting: SortingConfig):
     recording_folder = f'output/recordings/{sorting.recording}'
@@ -109,14 +128,29 @@ def create_sorting_view(sorting: SortingConfig):
         print('Preprocessed recording directory does not exist. Skipping')
         return
     
-    if not os.path.exists(f'{sorting_folder}/output/sorter_output/firings.npz'):
-        print('Sorting output directory does not exist. Skipping')
+    if not os.path.exists(f'{sorting_folder}/sorting.npz'):
+        print('Sorting result does not exist. Skipping')
         return
     
     # Load recording and sorting extractors
     recording_extractor: si.BaseRecording = si.load_extractor(f'{recording_folder}/recording_preprocessed')
-    sorting_extractor = se.NpzSortingExtractor(f'{sorting_folder}/output/sorter_output/firings.npz')
+    sorting_extractor = se.NpzSortingExtractor(f'{sorting_folder}/sorting.npz')
 
+    return create_recording_sorting_pair_view(
+        recording_extractor=recording_extractor,
+        sorting_extractor=sorting_extractor,
+        sorting_json_fname=f'{sorting_visualization_folder}/sorting.json',
+        sorting_json_uri='$dir/sorting.json',
+        recording_id=sorting.recording
+    )
+
+def create_recording_sorting_pair_view(*,
+    recording_extractor: si.BaseRecording,
+    sorting_extractor: si.BaseSorting,
+    sorting_json_fname: str,
+    sorting_json_uri: str,
+    recording_id: str
+):
     print('Creating units table view')
     v_ut = create_units_table_view(sorting=sorting_extractor)
 
@@ -140,7 +174,7 @@ def create_sorting_view(sorting: SortingConfig):
     }
 
     # Create sorting.json
-    print('Creating sorting.json')
+    print(f'Creating sorting json')
     sorting_data = {
         'samplingFrequency': sorting_extractor.get_sampling_frequency(),
         'units': [
@@ -153,7 +187,7 @@ def create_sorting_view(sorting: SortingConfig):
             if len(sorting_extractor.get_unit_spike_train(unit_id)) > 0
         ]
     }
-    with open(f'{sorting_visualization_folder}/sorting.json', 'w') as f:
+    with open(sorting_json_fname, 'w') as f:
         json.dump(fg.serialize_data(sorting_data), f)
     
     v_cc = create_cross_correlograms_view(
@@ -186,8 +220,8 @@ def create_sorting_view(sorting: SortingConfig):
 
     v_traces = vv.EphysTraces(
         format='spikeinterface.binary',
-        uri=f'rtcshare://recordings/{sorting.recording}/recording_preprocessed',
-        sorting_uri='$dir/sorting.json'
+        uri=f'rtcshare://recordings/{recording_id}/recording_preprocessed',
+        sorting_uri=sorting_json_uri
     )
 
     v_tab = vv.TabLayout(
