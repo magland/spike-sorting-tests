@@ -16,6 +16,7 @@ type SpikeInterfaceParams = {
 }
 
 const useSortingInfo = (recordingId: string, sorterId: string): {
+    info: {num_units: number} | undefined
     spikeInterfaceLog: SpikeInterfaceLog | undefined
     spikeInterfaceParams: SpikeInterfaceParams | undefined
 } => {
@@ -27,10 +28,14 @@ const useSortingInfo = (recordingId: string, sorterId: string): {
     const spikeinterfaceParamsPath = `${pathDir}/output/spikeinterface_params.json`
     const {content: spikeInterfaceParams} = useRtcshareJsonFile(spikeinterfaceParamsPath)
 
+    const infoPath = `${pathDir}/sorting_info.json`
+    const {content: sortingInfo} = useRtcshareJsonFile(infoPath)
+
     const info = useMemo(() => ({
+        info: sortingInfo ? sortingInfo as {num_units: number} : undefined,
         spikeInterfaceLog: spikeInterfaceLog ? spikeInterfaceLog as SpikeInterfaceLog : undefined,
         spikeInterfaceParams: spikeInterfaceParams ? spikeInterfaceParams as any : undefined
-    }), [spikeInterfaceLog, spikeInterfaceParams])
+    }), [spikeInterfaceLog, spikeInterfaceParams, sortingInfo])
     return info
 }
 

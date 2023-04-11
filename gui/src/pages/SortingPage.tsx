@@ -1,12 +1,12 @@
-import { FunctionComponent, PropsWithChildren, useMemo, useState } from 'react'
-import { serviceBaseUrl } from '../config'
-import { useRtcshareYamlFile } from './useRtcshareFile'
+import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import { Table, TableBody, TableCell, TableRow } from '@mui/material'
+import { FunctionComponent, PropsWithChildren, useMemo, useState } from 'react'
+import Hyperlink from '../components/Hyperlink'
+import { serviceBaseUrl } from '../config'
+import useRoute from '../useRoute'
+import { useRtcshareYamlFile } from './useRtcshareFile'
 import useSortingInfo from './useSortingInfo'
 import useSortingOutputLog from './useSortingOutputLog'
-import { ExpandLess, ExpandMore, ExpandRounded } from '@mui/icons-material'
-import Hyperlink from '../components/Hyperlink'
-import useRoute from '../useRoute'
 
 const SortingPage: FunctionComponent<{recordingId: string, sorterId: string}> = ({recordingId, sorterId}) => {
     const {setRoute} = useRoute()
@@ -41,6 +41,10 @@ const SortingPage: FunctionComponent<{recordingId: string, sorterId: string}> = 
                         <TableCell style={{fontWeight: 'bold'}}>Run time (sec):</TableCell>
                         <TableCell>{formatNumber(sortingInfo.spikeInterfaceLog?.run_time, 2)}</TableCell>
                     </TableRow>
+                    <TableRow key="numUnits">
+                        <TableCell style={{fontWeight: 'bold'}}>Num. units:</TableCell>
+                        <TableCell>{sortingInfo.info?.num_units}</TableCell>
+                    </TableRow>
                 </TableBody>
             </Table>
             <p>
@@ -54,7 +58,7 @@ const SortingPage: FunctionComponent<{recordingId: string, sorterId: string}> = 
     )
 }
 
-const formatNumber = (num: number | undefined, precision: number) => {
+export const formatNumber = (num: number | undefined, precision: number) => {
     return num !== undefined ? num.toFixed(precision) : undefined
 }
 

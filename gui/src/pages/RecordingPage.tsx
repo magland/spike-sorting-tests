@@ -1,13 +1,17 @@
 import { Table, TableBody, TableCell, TableRow } from '@mui/material'
-import { FunctionComponent, useMemo } from 'react'
+import { FunctionComponent, useContext, useMemo } from 'react'
 import Hyperlink from '../components/Hyperlink'
 import { serviceBaseUrl } from '../config'
+import { SpikeSortingConfigContext } from '../MainWindow'
 import useRoute from '../useRoute'
+import SortingsTable from './SortingsTable'
 import useRecordingInfo from './useRecordingInfo'
 import { useRtcshareYamlFile } from './useRtcshareFile'
 
 const RecordingPage: FunctionComponent<{recordingId: string}> = ({recordingId}) => {
     const {setRoute} = useRoute()
+    const spikeSortingConfig = useContext(SpikeSortingConfigContext)
+    const sortings = spikeSortingConfig.sortings
     const pathDir = `visualizations/recordings/${recordingId}`
     const path = `${pathDir}/view.yaml`
     const {content: viewYaml} = useRtcshareYamlFile(path)
@@ -32,7 +36,7 @@ const RecordingPage: FunctionComponent<{recordingId: string}> = ({recordingId}) 
                         <TableCell>{info?.sampling_frequency}</TableCell>
                     </TableRow>
                     <TableRow key="numChannels">
-                        <TableCell style={{fontWeight: 'bold'}}>Num, channels:</TableCell>
+                        <TableCell style={{fontWeight: 'bold'}}>Num. channels:</TableCell>
                         <TableCell>{info?.num_channels}</TableCell>
                     </TableRow>
                     <TableRow key="durationSec">
@@ -45,6 +49,10 @@ const RecordingPage: FunctionComponent<{recordingId: string}> = ({recordingId}) 
                     </TableRow>
                 </TableBody>
             </Table>
+            <h3>Sortings</h3>
+            <hr />
+            <SortingsTable recordingId={recordingId} sortings={sortings} />
+            <hr />
             <p>
                 {viewUrl && <a href={viewUrl} target="_blank" rel="noreferrer">View recording with ground truth</a>}
             </p>
