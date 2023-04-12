@@ -25,6 +25,11 @@ recordings:
 # Sorters to be used in tests
 sorters:
   -
+    id: truth
+    type: truth
+    algorithm: truth
+    sorting_parameters: {}
+  -
     id: mountainsort5
     type: spikeinterface
     algorithm: mountainsort5
@@ -44,6 +49,9 @@ sorters:
 sortings:
   -
     recording: spikeforest.paired_english.m15_190315_152315_cell1
+    sorter: truth
+  -
+    recording: spikeforest.paired_english.m15_190315_152315_cell1
     sorter: mountainsort5
   -
     recording: spikeforest.paired_english.m15_190315_152315_cell1
@@ -53,6 +61,9 @@ sortings:
     sorter: spykingcircus2
   -
     recording: spikeforest.paired_english.m113_191125_213423
+    sorter: truth
+  -
+    recording: spikeforest.paired_english.m113_191125_213423
     sorter: mountainsort5
   -
     recording: spikeforest.paired_english.m113_191125_213423
@@ -60,6 +71,9 @@ sortings:
   -
     recording: spikeforest.paired_english.m113_191125_213423
     sorter: spykingcircus2
+  -
+    recording: spikeforest.paired_kampff.2014_11_25_Pair_3_0
+    sorter: truth
   -
     recording: spikeforest.paired_kampff.2014_11_25_Pair_3_0
     sorter: mountainsort5
