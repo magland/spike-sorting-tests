@@ -8,8 +8,10 @@ from core.config_classes import SpikeSortingTestsConfig, SortingConfig
 
 
 def execute_single_comparison(config: SpikeSortingTestsConfig, sorting1_config: SortingConfig, sorting2_config: SortingConfig):
+    # find the two sorters in config.sorters
     sorter1 = next((s for s in config.sorters if s.id == sorting1_config.sorter), None)
     sorter2 = next((s for s in config.sorters if s.id == sorting2_config.sorter), None)
+
     if sorter1 is None:
         print(f'Sorter {sorting1_config.sorter} not found in config. Skipping.')
         return

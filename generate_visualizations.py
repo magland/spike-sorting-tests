@@ -32,6 +32,7 @@ def main():
     if args.sorter:
         filtered_sortings = [sorting for sorting in config.sortings if sorting.sorter == args.sorter]
     
+    # Generate recording visualizations
     for recording in config.recordings:
         print(f'Generating visualization for {recording.id}')
         recording_visualization_folder = f'output/visualizations/recordings/{recording.id}'
@@ -56,6 +57,7 @@ def main():
             print(f'View already exists')
         print('')
 
+    # Generate sorting visualizations
     for sorting in filtered_sortings:
         print(f"Generating visualization for {sorting.recording} and {sorting.sorter}")
         sorting_folder = f'output/recordings/{sorting.recording}/sortings/{sorting.sorter}'
@@ -72,7 +74,7 @@ def main():
                 os.environ['KACHERY_STORE_FILE_PREFIX'] = f'$dir'
                 if os.path.exists(f'{sorting_visualization_folder}/sha1'):
                     shutil.rmtree(f'{sorting_visualization_folder}/sha1')
-                url_dict = view.url_dict(label=recording.id)
+                url_dict = view.url_dict(label=f'{sorting.sorter} {sorting.recording}')
                 view = {
                     'type': 'figurl',
                     'v': url_dict['v'],
@@ -84,6 +86,35 @@ def main():
         else:
             print(f'View already exists')
         print('')
+    
+    # Generate sorting comparison visualizations
+    for sorting1 in filtered_sortings:
+        for sorting2 in filtered_sortings:
+            if sorting1.recording != sorting2.recording:
+                continue
+            if sorting1.sorter == sorting2.sorter:
+                continue
+            print(f"Generating visualization for {sorting1.recording}: {sorting1.sorter} vs {sorting2.sorter}")
+            sorting_comparison_folder = f'output/visualizations/recordings/{sorting1.recording}/sortings/{sorting1.sorter}/comparisons/{sorting2.sorter}'
+            if not os.path.exists(sorting_comparison_folder):
+                os.makedirs(sorting_comparison_folder)
+            if not os.path.exists(f'{sorting_comparison_folder}/view.yaml'):
+                view = create_sorting_comparison_view(sorting1, sorting2)
+                if view is not None:
+                    os.environ['KACHERY_STORE_FILE_DIR'] = f'{sorting_comparison_folder}'
+                    os.environ['KACHERY_STORE_FILE_PREFIX'] = f'$dir'
+                    if os.path.exists(f'{sorting_comparison_folder}/sha1'):
+                        shutil.rmtree(f'{sorting_comparison_folder}/sha1')
+                    url_dict = view.url_dict(label=f'{sorting1.sorter} vs {sorting2.sorter} for {sorting1.recording}')
+                    view = {
+                        'type': 'figurl',
+                        'v': url_dict['v'],
+                        'd': url_dict['d'],
+                        'label': f'{sorting1.sorter} vs {sorting2.sorter} for {sorting1.recording}'
+                    }
+                    with open(f'{sorting_comparison_folder}/view.yaml', 'w') as f:
+                        yaml.dump(view, f)
+            
 
 def create_recording_view(recording: RecordingConfig):
     recording_folder = f'output/recordings/{recording.id}'
@@ -143,6 +174,50 @@ def create_sorting_view(sorting: SortingConfig):
         sorting_json_uri='$dir/sorting.json',
         recording_id=sorting.recording
     )
+
+def create_sorting_comparison_view(sorting1: SortingConfig, sorting2: SortingConfig):
+    recording_folder = f'output/recordings/{sorting1.recording}'
+    sorting1_folder = f'{recording_folder}/sortings/{sorting1.sorter}'
+    sorting2_folder = f'{recording_folder}/sortings/{sorting2.sorter}'
+    sorting_comparison_visualization_folder = f'output/visualizations/recordings/{sorting1.recording}/sortings/{sorting1.sorter}/comparisons/{sorting2.sorter}'
+
+    if not os.path.exists(f'{recording_folder}/recording_preprocessed'):
+        print('Preprocessed recording directory does not exist. Skipping')
+        return
+    
+    if not os.path.exists(f'{sorting1_folder}/sorting.npz'):
+        print('Sorting1 result does not exist. Skipping')
+        return
+    
+    if not os.path.exists(f'{sorting2_folder}/sorting.npz'):
+        print('Sorting2 result does not exist. Skipping')
+        return
+    
+    # Load recording and sorting extractors
+    recording_extractor: si.BaseRecording = si.load_extractor(f'{recording_folder}/recording_preprocessed')
+    sorting1_extractor = se.NpzSortingExtractor(f'{sorting1_folder}/sorting.npz')
+    sorting2_extractor = se.NpzSortingExtractor(f'{sorting2_folder}/sorting.npz')
+
+    comparison_sorting_extractor = create_comparison_sorting_extractor(sorting1_extractor, sorting2_extractor)
+
+    return create_recording_sorting_pair_view(
+        recording_extractor=recording_extractor,
+        sorting_extractor=comparison_sorting_extractor,
+        sorting_json_fname=f'{sorting_comparison_visualization_folder}/comparison_sorting.json',
+        sorting_json_uri='$dir/comparison_sorting.json',
+        recording_id=sorting1.recording
+    )
+
+def create_comparison_sorting_extractor(sorting1: si.BaseSorting, sorting2: si.BaseSorting):
+    unit_ids1 = sorting1.get_unit_ids()
+    unit_ids2 = sorting2.get_unit_ids()
+    units_dict = {}
+    for id1 in unit_ids1:
+        units_dict[f'A{id1}'] = sorting1.get_unit_spike_train(id1)
+    for id2 in unit_ids2:
+        units_dict[f'B{id2}'] = sorting2.get_unit_spike_train(id2)
+
+    return se.NumpySorting.from_dict([units_dict], sampling_frequency=sorting1.sampling_frequency)
 
 def create_recording_sorting_pair_view(*,
     recording_extractor: si.BaseRecording,

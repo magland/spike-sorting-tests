@@ -25,6 +25,7 @@ const RecordingPage: FunctionComponent<{recordingId: string}> = ({recordingId}) 
     return (
         <div style={{margin: 20}}>
             <p><Hyperlink onClick={() => setRoute({page: 'home'})}>Back to recordings</Hyperlink></p>
+            <h3>Recording</h3>
             <Table className="CustomTable">
                 <TableBody>
                     <TableRow key="recordingId">

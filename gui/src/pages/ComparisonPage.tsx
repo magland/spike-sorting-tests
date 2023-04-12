@@ -2,6 +2,7 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material"
 import { FunctionComponent, useMemo } from "react"
 import Hyperlink from "../components/Hyperlink"
 import useRoute from "../useRoute"
+import SortingComparisonFigurlLink from "./SortingComparisonFigurlLink"
 import SortingFigurlLink from "./SortingFigurlLink"
 import useComparison, { Comparison } from "./useComparison"
 
@@ -34,7 +35,8 @@ const ComparisonPage: FunctionComponent<Props> = ({recordingId, sorterId1, sorte
         return ret
     }, [comparison])
     return (
-        <div>
+        <div style={{margin: 20}}>
+            <p><Hyperlink onClick={() => setRoute({page: 'home'})}>Back to recordings</Hyperlink></p>
             <h3>Comparison</h3>
             <Table className="CustomTable">
                 <TableBody>
@@ -64,6 +66,10 @@ const ComparisonPage: FunctionComponent<Props> = ({recordingId, sorterId1, sorte
                     </TableRow>
                 </TableBody>
             </Table>
+            <hr />
+            <p>
+                <SortingComparisonFigurlLink recordingId={recordingId} sorterId1={sorterId1} sorterId2={sorterId2} />
+            </p>
             <hr />
             <Table className="CustomTable">
                 <TableHead>

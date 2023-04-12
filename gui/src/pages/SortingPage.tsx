@@ -16,6 +16,7 @@ const SortingPage: FunctionComponent<{recordingId: string, sorterId: string}> = 
     return (
         <div style={{margin: 20}}>
             <p><Hyperlink onClick={() => setRoute({page: 'home'})}>Back to recordings</Hyperlink></p>
+            <h3>Sorting</h3>
             <Table className="CustomTable">
                 <TableBody>
                     <TableRow key="recordingId">
