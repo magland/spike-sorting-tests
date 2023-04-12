@@ -3,6 +3,7 @@ import { Table, TableBody, TableCell, TableRow } from '@mui/material'
 import { FunctionComponent, PropsWithChildren, useState } from 'react'
 import Hyperlink from '../components/Hyperlink'
 import useRoute from '../useRoute'
+import ComparisonAgreementsTable from './ComparisonAgreementsTable'
 import ComparisonsTable from './ComparisonsTable'
 import SortingFigurlLink from './SortingFigurlLink'
 import useSortingInfo from './useSortingInfo'
@@ -17,7 +18,7 @@ const SortingPage: FunctionComponent<{recordingId: string, sorterId: string}> = 
         <div style={{margin: 20}}>
             <p><Hyperlink onClick={() => setRoute({page: 'home'})}>Back to recordings</Hyperlink></p>
             <h3>Sorting</h3>
-            <Table className="CustomTable">
+            <Table className="CustomTable" style={{maxWidth: 1000}}>
                 <TableBody>
                     <TableRow key="recordingId">
                         <TableCell style={{fontWeight: 'bold'}}>Recording:</TableCell>
@@ -47,6 +48,8 @@ const SortingPage: FunctionComponent<{recordingId: string, sorterId: string}> = 
             <hr />
             <h3>Comparisons</h3>
             <ComparisonsTable recordingId={recordingId} sorterId={sorterId} />
+            <hr />
+            <ComparisonAgreementsTable recordingId={recordingId} sorterId={sorterId} />
             <hr />
             <Expandable label="Output log">
                 <OutputLog recordingId={recordingId} sorterId={sorterId} />

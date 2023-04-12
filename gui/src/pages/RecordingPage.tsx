@@ -26,7 +26,7 @@ const RecordingPage: FunctionComponent<{recordingId: string}> = ({recordingId}) 
         <div style={{margin: 20}}>
             <p><Hyperlink onClick={() => setRoute({page: 'home'})}>Back to recordings</Hyperlink></p>
             <h3>Recording</h3>
-            <Table className="CustomTable">
+            <Table className="CustomTable" style={{maxWidth: 1000}}>
                 <TableBody>
                     <TableRow key="recordingId">
                         <TableCell style={{fontWeight: 'bold'}}>Recording:</TableCell>
@@ -50,13 +50,14 @@ const RecordingPage: FunctionComponent<{recordingId: string}> = ({recordingId}) 
                     </TableRow>
                 </TableBody>
             </Table>
-            <h3>Sortings</h3>
-            <hr />
-            <SortingsTable recordingId={recordingId} sortings={sortings} />
             <hr />
             <p>
                 {viewUrl && <a href={viewUrl} target="_blank" rel="noreferrer">View recording with ground truth</a>}
             </p>
+            <hr />
+            <h3>Sortings</h3>
+            <SortingsTable recordingId={recordingId} sortings={sortings} />
+            <hr />
         </div>
     )
 }

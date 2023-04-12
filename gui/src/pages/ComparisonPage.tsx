@@ -38,7 +38,7 @@ const ComparisonPage: FunctionComponent<Props> = ({recordingId, sorterId1, sorte
         <div style={{margin: 20}}>
             <p><Hyperlink onClick={() => setRoute({page: 'home'})}>Back to recordings</Hyperlink></p>
             <h3>Comparison</h3>
-            <Table className="CustomTable">
+            <Table className="CustomTable" style={{maxWidth: 1000}}>
                 <TableBody>
                     <TableRow key="recordingId">
                         <TableCell style={{fontWeight: 'bold'}}>Recording:</TableCell>
@@ -73,10 +73,12 @@ const ComparisonPage: FunctionComponent<Props> = ({recordingId, sorterId1, sorte
             <hr />
             <Table className="CustomTable">
                 <TableHead>
-                    <TableCell>Unit</TableCell>
-                    <TableCell>Num. events</TableCell>
-                    <TableCell>Best matching unit</TableCell>
-                    <TableCell>Agreement</TableCell>
+                    <TableRow>
+                        <TableCell>Unit</TableCell>
+                        <TableCell>Num. events</TableCell>
+                        <TableCell>Best matching unit</TableCell>
+                        <TableCell>Agreement</TableCell>
+                    </TableRow>
                 </TableHead>
                 <TableBody>
                     {
@@ -95,7 +97,7 @@ const ComparisonPage: FunctionComponent<Props> = ({recordingId, sorterId1, sorte
     )
 }
 
-function getBestMatch(unitId: number, comparison: Comparison) {
+export const getBestMatch = (unitId: number, comparison: Comparison) => {
     let bestMatchingUnitId = -1
     let bestAgreement = -1
 
