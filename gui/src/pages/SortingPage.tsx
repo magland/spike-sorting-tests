@@ -1,22 +1,15 @@
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import { Table, TableBody, TableCell, TableRow } from '@mui/material'
-import { FunctionComponent, PropsWithChildren, useMemo, useState } from 'react'
+import { FunctionComponent, PropsWithChildren, useState } from 'react'
 import Hyperlink from '../components/Hyperlink'
-import { serviceBaseUrl } from '../config'
 import useRoute from '../useRoute'
-import { useRtcshareYamlFile } from './useRtcshareFile'
+import ComparisonsTable from './ComparisonsTable'
+import SortingFigurlLink from './SortingFigurlLink'
 import useSortingInfo from './useSortingInfo'
 import useSortingOutputLog from './useSortingOutputLog'
 
 const SortingPage: FunctionComponent<{recordingId: string, sorterId: string}> = ({recordingId, sorterId}) => {
     const {setRoute} = useRoute()
-    const pathDir = `visualizations/recordings/${recordingId}/sortings/${sorterId}`
-    const path = `${pathDir}/view.yaml`
-    const {content: viewYaml} = useRtcshareYamlFile(path)
-    const viewUrl = useMemo(() => {
-        if (!viewYaml) return undefined
-        return `https://figurl.org/f?v=${viewYaml.v}&d=${viewYaml.d}&dir=rtcshare://${pathDir}&sh=${serviceBaseUrl}&label=${encodeURIComponent(viewYaml.label)}`
-    }, [viewYaml, pathDir])
 
     const sortingInfo = useSortingInfo(recordingId, sorterId)
 
@@ -48,8 +41,11 @@ const SortingPage: FunctionComponent<{recordingId: string, sorterId: string}> = 
                 </TableBody>
             </Table>
             <p>
-                {viewUrl && <a href={viewUrl} target="_blank" rel="noreferrer">View sorting</a>}
+                <SortingFigurlLink recordingId={recordingId} sorterId={sorterId} />
             </p>
+            <hr />
+            <h3>Comparisons</h3>
+            <ComparisonsTable recordingId={recordingId} sorterId={sorterId} />
             <hr />
             <Expandable label="Output log">
                 <OutputLog recordingId={recordingId} sorterId={sorterId} />

@@ -7,6 +7,7 @@ import YAML from 'js-yaml'
 import { SpikeSortingConfig } from "./SpikeSortingConfig";
 import RecordingPage from "./pages/RecordingPage";
 import SortingPage from "./pages/SortingPage";
+import ComparisonPage from "./pages/ComparisonPage";
 
 type Props = any
 
@@ -63,6 +64,8 @@ const MainWindow: FunctionComponent<Props> = () => {
 						<RecordingPage recordingId={route.recordingId} />
 					) : route.page === 'sorting' ? (
 						<SortingPage recordingId={route.recordingId} sorterId={route.sorterId} />
+					) : route.page === 'comparison' ? (
+						<ComparisonPage recordingId={route.recordingId} sorterId1={route.sorterId1} sorterId2={route.sorterId2} />
 					) : (
 						<div>Unknown page: {(route as any).page}</div>
 					)

@@ -1,5 +1,6 @@
 import os
 import json
+import time
 import spikeinterface as si
 import spikeinterface.sorters as ss
 import spikeinterface.extractors as se
@@ -44,6 +45,7 @@ def prepare_single_recording(config: SpikeSortingTestsConfig, recording: Recordi
             print('sorting_true directory already exists')
     
     recording_info = {
+        'timestamp': time.time(),
         'recording_name': sf_rec.recording_name,
         'study_name': sf_rec.study_name,
         'study_set_name': sf_rec.study_set_name,
