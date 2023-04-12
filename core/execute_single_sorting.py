@@ -44,7 +44,7 @@ def execute_single_sorting(config: SpikeSortingTestsConfig, sorting_extractor: S
     print(f'Running spike sorting: {sorter.algorithm}')
     kwargs = {**sorter.sorting_parameters}
     if sorter.algorithm == 'spykingcircus2':
-        kwargs['job_kwargs'] = {'n_jobs': 4}
+        kwargs['job_kwargs'] = {'n_jobs': 10}
     logger = setup_logger(f'{sorting_folder}/output.log')
     with capture_console_output(logger):
         if sorter.type == 'spikeinterface':

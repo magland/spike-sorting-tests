@@ -1,86 +1,201 @@
-# Recordings to be used in tests
 recordings:
-  -
-    id: spikeforest.paired_english.m15_190315_152315_cell1
-    type: spikeforest
-    parameters:
-      study_name: paired_english
-      recording_name: m15_190315_152315_cell1
-    notes: A good example of a ground truth unit that has similar amplitude on two channels
-  -
-    id: spikeforest.paired_english.m113_191125_213423
-    type: spikeforest
-    parameters:
-      study_name: paired_english
-      recording_name: m113_191125_213423
-    notes: ""
-  -
-    id: spikeforest.paired_kampff.2014_11_25_Pair_3_0
-    type: spikeforest
-    parameters:
-      study_name: paired_kampff
-      recording_name: 2014_11_25_Pair_3_0
-    notes: ""
-
-# Sorters to be used in tests
+- id: spikeforest.paired_english.m139_200114_222743
+  notes: ''
+  parameters:
+    recording_name: m139_200114_222743
+    study_name: paired_english
+  type: spikeforest
+- id: spikeforest.paired_english.m15_190315_152315_cell1
+  notes: ''
+  parameters:
+    recording_name: m15_190315_152315_cell1
+    study_name: paired_english
+  type: spikeforest
+- id: spikeforest.paired_english.m113_191125_213423
+  notes: ''
+  parameters:
+    recording_name: m113_191125_213423
+    study_name: paired_english
+  type: spikeforest
+- id: spikeforest.paired_english.m139_200114_230220
+  notes: ''
+  parameters:
+    recording_name: m139_200114_230220
+    study_name: paired_english
+  type: spikeforest
+- id: spikeforest.paired_english.m14_190326_160710_cell1
+  notes: ''
+  parameters:
+    recording_name: m14_190326_160710_cell1
+    study_name: paired_english
+  type: spikeforest
+- id: spikeforest.paired_kampff.2014_11_25_Pair_3_0
+  notes: ''
+  parameters:
+    recording_name: 2014_11_25_Pair_3_0
+    study_name: paired_kampff
+  type: spikeforest
+- id: spikeforest.paired_kampff.2015_09_03_Pair_9_0A
+  notes: ''
+  parameters:
+    recording_name: 2015_09_03_Pair_9_0A
+    study_name: paired_kampff
+  type: spikeforest
+- id: spikeforest.paired_kampff.2015_09_03_Pair_9_0B
+  notes: ''
+  parameters:
+    recording_name: 2015_09_03_Pair_9_0B
+    study_name: paired_kampff
+  type: spikeforest
+- id: spikeforest.paired_kampff.c14
+  notes: ''
+  parameters:
+    recording_name: c14
+    study_name: paired_kampff
+  type: spikeforest
+- id: spikeforest.paired_kampff.c26
+  notes: ''
+  parameters:
+    recording_name: c26
+    study_name: paired_kampff
+  type: spikeforest
+- id: spikeforest.paired_kampff.c28
+  notes: ''
+  parameters:
+    recording_name: c28
+    study_name: paired_kampff
+  type: spikeforest
+- id: spikeforest.paired_kampff.c45
+  notes: ''
+  parameters:
+    recording_name: c45
+    study_name: paired_kampff
+  type: spikeforest
+- id: spikeforest.paired_kampff.c46
+  notes: ''
+  parameters:
+    recording_name: c46
+    study_name: paired_kampff
+  type: spikeforest
 sorters:
-  -
-    id: truth
-    type: truth
-    algorithm: truth
-    sorting_parameters: {}
-  -
-    id: mountainsort5
-    type: spikeinterface
-    algorithm: mountainsort5
-    sorting_parameters: {}
-  -
-    id: spykingcircus2
-    type: spikeinterface
-    algorithm: spykingcircus2
-    sorting_parameters: {}
-  -
-    id: kilosort2_5
-    type: spikeinterface
-    algorithm: kilosort2_5
-    sorting_parameters: {}
-
-# Combinations of recordings and sorters to be tested
+- algorithm: truth
+  id: truth
+  sorting_parameters: {}
+  type: truth
+- algorithm: mountainsort5
+  id: mountainsort5
+  sorting_parameters: {}
+  type: spikeinterface
+- algorithm: spykingcircus2
+  id: spykingcircus2
+  sorting_parameters: {}
+  type: spikeinterface
+- algorithm: kilosort2_5
+  id: kilosort2_5
+  sorting_parameters: {}
+  type: spikeinterface
 sortings:
-  -
-    recording: spikeforest.paired_english.m15_190315_152315_cell1
-    sorter: truth
-  -
-    recording: spikeforest.paired_english.m15_190315_152315_cell1
-    sorter: mountainsort5
-  -
-    recording: spikeforest.paired_english.m15_190315_152315_cell1
-    sorter: kilosort2_5
-  -
-    recording: spikeforest.paired_english.m15_190315_152315_cell1
-    sorter: spykingcircus2
-  -
-    recording: spikeforest.paired_english.m113_191125_213423
-    sorter: truth
-  -
-    recording: spikeforest.paired_english.m113_191125_213423
-    sorter: mountainsort5
-  -
-    recording: spikeforest.paired_english.m113_191125_213423
-    sorter: kilosort2_5
-  -
-    recording: spikeforest.paired_english.m113_191125_213423
-    sorter: spykingcircus2
-  -
-    recording: spikeforest.paired_kampff.2014_11_25_Pair_3_0
-    sorter: truth
-  -
-    recording: spikeforest.paired_kampff.2014_11_25_Pair_3_0
-    sorter: mountainsort5
-  -
-    recording: spikeforest.paired_kampff.2014_11_25_Pair_3_0
-    sorter: kilosort2_5
-  -
-    recording: spikeforest.paired_kampff.2014_11_25_Pair_3_0
-    sorter: spykingcircus2
-  
+- recording: spikeforest.paired_english.m139_200114_222743
+  sorter: truth
+- recording: spikeforest.paired_english.m139_200114_222743
+  sorter: mountainsort5
+- recording: spikeforest.paired_english.m139_200114_222743
+  sorter: spykingcircus2
+- recording: spikeforest.paired_english.m139_200114_222743
+  sorter: kilosort2_5
+- recording: spikeforest.paired_english.m15_190315_152315_cell1
+  sorter: truth
+- recording: spikeforest.paired_english.m15_190315_152315_cell1
+  sorter: mountainsort5
+- recording: spikeforest.paired_english.m15_190315_152315_cell1
+  sorter: spykingcircus2
+- recording: spikeforest.paired_english.m15_190315_152315_cell1
+  sorter: kilosort2_5
+- recording: spikeforest.paired_english.m113_191125_213423
+  sorter: truth
+- recording: spikeforest.paired_english.m113_191125_213423
+  sorter: mountainsort5
+- recording: spikeforest.paired_english.m113_191125_213423
+  sorter: spykingcircus2
+- recording: spikeforest.paired_english.m113_191125_213423
+  sorter: kilosort2_5
+- recording: spikeforest.paired_english.m139_200114_230220
+  sorter: truth
+- recording: spikeforest.paired_english.m139_200114_230220
+  sorter: mountainsort5
+- recording: spikeforest.paired_english.m139_200114_230220
+  sorter: spykingcircus2
+- recording: spikeforest.paired_english.m139_200114_230220
+  sorter: kilosort2_5
+- recording: spikeforest.paired_english.m14_190326_160710_cell1
+  sorter: truth
+- recording: spikeforest.paired_english.m14_190326_160710_cell1
+  sorter: mountainsort5
+- recording: spikeforest.paired_english.m14_190326_160710_cell1
+  sorter: spykingcircus2
+- recording: spikeforest.paired_english.m14_190326_160710_cell1
+  sorter: kilosort2_5
+- recording: spikeforest.paired_kampff.2014_11_25_Pair_3_0
+  sorter: truth
+- recording: spikeforest.paired_kampff.2014_11_25_Pair_3_0
+  sorter: mountainsort5
+- recording: spikeforest.paired_kampff.2014_11_25_Pair_3_0
+  sorter: spykingcircus2
+- recording: spikeforest.paired_kampff.2014_11_25_Pair_3_0
+  sorter: kilosort2_5
+- recording: spikeforest.paired_kampff.2015_09_03_Pair_9_0A
+  sorter: truth
+- recording: spikeforest.paired_kampff.2015_09_03_Pair_9_0A
+  sorter: mountainsort5
+- recording: spikeforest.paired_kampff.2015_09_03_Pair_9_0A
+  sorter: spykingcircus2
+- recording: spikeforest.paired_kampff.2015_09_03_Pair_9_0A
+  sorter: kilosort2_5
+- recording: spikeforest.paired_kampff.2015_09_03_Pair_9_0B
+  sorter: truth
+- recording: spikeforest.paired_kampff.2015_09_03_Pair_9_0B
+  sorter: mountainsort5
+- recording: spikeforest.paired_kampff.2015_09_03_Pair_9_0B
+  sorter: spykingcircus2
+- recording: spikeforest.paired_kampff.2015_09_03_Pair_9_0B
+  sorter: kilosort2_5
+- recording: spikeforest.paired_kampff.c14
+  sorter: truth
+- recording: spikeforest.paired_kampff.c14
+  sorter: mountainsort5
+- recording: spikeforest.paired_kampff.c14
+  sorter: spykingcircus2
+- recording: spikeforest.paired_kampff.c14
+  sorter: kilosort2_5
+- recording: spikeforest.paired_kampff.c26
+  sorter: truth
+- recording: spikeforest.paired_kampff.c26
+  sorter: mountainsort5
+- recording: spikeforest.paired_kampff.c26
+  sorter: spykingcircus2
+- recording: spikeforest.paired_kampff.c26
+  sorter: kilosort2_5
+- recording: spikeforest.paired_kampff.c28
+  sorter: truth
+- recording: spikeforest.paired_kampff.c28
+  sorter: mountainsort5
+- recording: spikeforest.paired_kampff.c28
+  sorter: spykingcircus2
+- recording: spikeforest.paired_kampff.c28
+  sorter: kilosort2_5
+- recording: spikeforest.paired_kampff.c45
+  sorter: truth
+- recording: spikeforest.paired_kampff.c45
+  sorter: mountainsort5
+- recording: spikeforest.paired_kampff.c45
+  sorter: spykingcircus2
+- recording: spikeforest.paired_kampff.c45
+  sorter: kilosort2_5
+- recording: spikeforest.paired_kampff.c46
+  sorter: truth
+- recording: spikeforest.paired_kampff.c46
+  sorter: mountainsort5
+- recording: spikeforest.paired_kampff.c46
+  sorter: spykingcircus2
+- recording: spikeforest.paired_kampff.c46
+  sorter: kilosort2_5

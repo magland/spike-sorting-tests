@@ -9,6 +9,10 @@ def setup_logger(output_file: str):
         os.remove(output_file)
     
     logger = logging.getLogger('spike_sorting')
+    
+    while logger.hasHandlers():
+        logger.removeHandler(logger.handlers[0])
+
     logger.setLevel(logging.DEBUG)
 
     formatter = logging.Formatter('%(asctime)s - %(message)s')
@@ -45,7 +49,7 @@ def capture_console_output(logger: Logger):
     stderr_original = sys.stderr
 
     try:
-        sys.stdout = LoggerWriter(logger, logging.INFO)
+        sys.stdout = LoggerWriter(logger, logging.DEBUG)
         sys.stderr = LoggerWriter(logger, logging.ERROR)
         yield
     finally:
