@@ -45,7 +45,6 @@ def prepare_single_recording(config: SpikeSortingTestsConfig, recording: Recordi
             print('sorting_true directory already exists')
     
     recording_info = {
-        'timestamp': time.time(),
         'recording_name': sf_rec.recording_name,
         'study_name': sf_rec.study_name,
         'study_set_name': sf_rec.study_set_name,
@@ -56,6 +55,8 @@ def prepare_single_recording(config: SpikeSortingTestsConfig, recording: Recordi
     }
     with open(f'{recording_folder}/recording_info.json', 'w') as f:
         json.dump(recording_info, f, indent=4)
+    with open(f'{recording_folder}/timestamp', 'w') as f:
+        f.write(str(time.time()))
 
 def write_binary_recording(recording: si.BaseRecording, folder: str):
     recording.save(folder=folder, format='binary')

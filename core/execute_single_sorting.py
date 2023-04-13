@@ -66,11 +66,13 @@ def execute_single_sorting(config: SpikeSortingTestsConfig, sorting_extractor: S
 
     print('Writing sorting info')
     sorting_info = {
-        'timestamp': time.time(),
         'num_units': len(sorting_extractor.unit_ids)
     }
     with open(f'{sorting_folder}/sorting_info.json', 'w') as f:
         json.dump(sorting_info, f, indent=4)
+    
+    with open(f'{sorting_folder}/timestamp', 'w') as f:
+        f.write(str(time.time()))
 
     print('Unit IDs:')
     print(sorting_extractor.unit_ids)

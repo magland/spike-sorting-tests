@@ -68,11 +68,8 @@ def execute_single_comparison(config: SpikeSortingTestsConfig, sorting1_config: 
     with open(f'{comparison_folder}/comparison.json', 'w') as f:
         json.dump(comparison, f)
     
-    comparison_info = {
-        'timestamp': time.time()
-    }
-    with open(f'{comparison_folder}/comparison_info.json', 'w') as f:
-        json.dump(comparison_info, f)
+    with open(f'{comparison_folder}/timestamp', 'w') as f:
+        f.write(str(time.time()))
 
 def do_comparison(sorting1: si.BaseSorting, sorting2: si.BaseSorting, tol=20):
     event_counts1 = []

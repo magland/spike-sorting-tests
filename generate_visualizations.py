@@ -2,6 +2,7 @@ import os
 import argparse
 import yaml
 import json
+import time
 import shutil
 from typing import List, Dict
 import numpy as np
@@ -53,6 +54,8 @@ def main():
             }
             with open(f'{recording_visualization_folder}/view.yaml', 'w') as f:
                 yaml.dump(view, f)
+            with open(f'{recording_visualization_folder}/timestamp', 'w') as f:
+                f.write(str(time.time()))
         else:
             print(f'View already exists')
         print('')
@@ -83,6 +86,8 @@ def main():
                 }
                 with open(f'{sorting_visualization_folder}/view.yaml', 'w') as f:
                     yaml.dump(view, f)
+                with open(f'{sorting_visualization_folder}/timestamp', 'w') as f:
+                    f.write(str(time.time()))
         else:
             print(f'View already exists')
         print('')
@@ -95,16 +100,16 @@ def main():
             if sorting1.sorter == sorting2.sorter:
                 continue
             print(f"Generating visualization for {sorting1.recording}: {sorting1.sorter} vs {sorting2.sorter}")
-            sorting_comparison_folder = f'output/visualizations/recordings/{sorting1.recording}/sortings/{sorting1.sorter}/comparisons/{sorting2.sorter}'
-            if not os.path.exists(sorting_comparison_folder):
-                os.makedirs(sorting_comparison_folder)
-            if not os.path.exists(f'{sorting_comparison_folder}/view.yaml'):
+            sorting_comparison_visualization_folder = f'output/visualizations/recordings/{sorting1.recording}/sortings/{sorting1.sorter}/comparisons/{sorting2.sorter}'
+            if not os.path.exists(sorting_comparison_visualization_folder):
+                os.makedirs(sorting_comparison_visualization_folder)
+            if not os.path.exists(f'{sorting_comparison_visualization_folder}/view.yaml'):
                 view = create_sorting_comparison_view(sorting1, sorting2)
                 if view is not None:
-                    os.environ['KACHERY_STORE_FILE_DIR'] = f'{sorting_comparison_folder}'
+                    os.environ['KACHERY_STORE_FILE_DIR'] = f'{sorting_comparison_visualization_folder}'
                     os.environ['KACHERY_STORE_FILE_PREFIX'] = f'$dir'
-                    if os.path.exists(f'{sorting_comparison_folder}/sha1'):
-                        shutil.rmtree(f'{sorting_comparison_folder}/sha1')
+                    if os.path.exists(f'{sorting_comparison_visualization_folder}/sha1'):
+                        shutil.rmtree(f'{sorting_comparison_visualization_folder}/sha1')
                     url_dict = view.url_dict(label=f'{sorting1.sorter} vs {sorting2.sorter} for {sorting1.recording}')
                     view = {
                         'type': 'figurl',
@@ -112,8 +117,10 @@ def main():
                         'd': url_dict['d'],
                         'label': f'{sorting1.sorter} vs {sorting2.sorter} for {sorting1.recording}'
                     }
-                    with open(f'{sorting_comparison_folder}/view.yaml', 'w') as f:
+                    with open(f'{sorting_comparison_visualization_folder}/view.yaml', 'w') as f:
                         yaml.dump(view, f)
+                    with open(f'{sorting_comparison_visualization_folder}/timestamp', 'w') as f:
+                        f.write(str(time.time()))
             
 
 def create_recording_view(recording: RecordingConfig):
