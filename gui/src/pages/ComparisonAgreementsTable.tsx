@@ -14,23 +14,33 @@ const ComparisonAgreementsTable: FunctionComponent<{recordingId: string, sorterI
         const ret: {
             unit: number
             agreements: number[]
+            sensitivities: number[]
+            specificities: number[]
         }[] = []
         if (!comparisons) return ret
         const firstDefinedComparison: Comparison | undefined = comparisons.find(c => (c !== undefined))
         if (!firstDefinedComparison) return ret
         for (const a of firstDefinedComparison.event_counts1) {
             const agreements: number[] = []
+            const sensitivities: number[] = []
+            const specificities: number[] = []
             for (const cc of comparisons) {
                 if (cc) {
-                    const {agreement} = getBestMatch(a.id, cc)
+                    const {agreement, sensitivity, specificity} = getBestMatch(a.id, cc)
                     agreements.push(agreement)
+                    sensitivities.push(sensitivity)
+                    specificities.push(specificity)
                 } else {
                     agreements.push(0)
+                    sensitivities.push(0)
+                    specificities.push(0)
                 }
             }
             ret.push({
                 unit: a.id,
-                agreements
+                agreements,
+                sensitivities,
+                specificities
             })
         }
         return ret
@@ -51,7 +61,7 @@ const ComparisonAgreementsTable: FunctionComponent<{recordingId: string, sorterI
                         <TableRow key={row.unit}>
                             <TableCell>{row.unit}</TableCell>
                             {row.agreements.map((agreement, i) => (
-                                <TableCell key={i}>{agreement.toFixed(3)}</TableCell>
+                                <TableCell key={i}>{agreement.toFixed(3)} / {row.sensitivities[i].toFixed(3)} / {row.specificities[i].toFixed(3)}</TableCell>
                             ))}
                         </TableRow>
                     ))

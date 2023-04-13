@@ -100,6 +100,8 @@ const ComparisonPage: FunctionComponent<Props> = ({recordingId, sorterId1, sorte
 export const getBestMatch = (unitId: number, comparison: Comparison) => {
     let bestMatchingUnitId = -1
     let bestAgreement = -1
+    let bestSensitivity = -1
+    let bestSpecificity = -1
 
     const counts1: {[key: number]: number} = {}
     for (const a of comparison.event_counts1) {
@@ -111,15 +113,20 @@ export const getBestMatch = (unitId: number, comparison: Comparison) => {
     }
 
     for (const a of comparison.matching_event_counts) {
+        if (a.id1 !== unitId) continue
         const numer = a.count
         const denom = counts1[a.id1] + counts2[a.id2] - a.count
         const agreement = denom ? numer / denom : 0
-        if ((a.id1 === unitId) && (agreement > bestAgreement)) {
+        const sensitivity = counts1[a.id1] ? a.count / counts1[a.id1] : 0
+        const specificity = counts2[a.id2] ? a.count / counts2[a.id2] : 0
+        if (agreement > bestAgreement) {
             bestMatchingUnitId = a.id2
             bestAgreement = agreement
+            bestSensitivity = sensitivity
+            bestSpecificity = specificity
         }
     }
-    return {bestMatchingUnitId, agreement: Math.max(bestAgreement, 0), numEvents: counts1[unitId]}
+    return {bestMatchingUnitId, agreement: Math.max(bestAgreement, 0), sensitivity: bestSensitivity, specificity: bestSpecificity, numEvents: counts1[unitId]}
 }
 
 export default ComparisonPage
