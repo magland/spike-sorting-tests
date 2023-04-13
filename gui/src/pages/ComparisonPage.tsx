@@ -126,7 +126,13 @@ export const getBestMatch = (unitId: number, comparison: Comparison) => {
             bestSpecificity = specificity
         }
     }
-    return {bestMatchingUnitId, agreement: Math.max(bestAgreement, 0), sensitivity: bestSensitivity, specificity: bestSpecificity, numEvents: counts1[unitId]}
+    return {
+        bestMatchingUnitId,
+        agreement: Math.max(bestAgreement, 0),
+        sensitivity: Math.max(bestSensitivity, 0),
+        specificity: Math.max(bestSpecificity, 0),
+        numEvents: counts1[unitId]
+    }
 }
 
 export default ComparisonPage

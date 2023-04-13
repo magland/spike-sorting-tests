@@ -41,7 +41,8 @@ def execute_single_sorting(config: SpikeSortingTestsConfig, sorting_extractor: S
 
     recording_extractor: si.BaseRecording = si.load_extractor(f'{recording_folder}/recording')
 
-    print(f'Running spike sorting: {sorter.algorithm}')
+    print(f'Running spike sorting: {sorter.id} {sorter.algorithm}')
+    print(sorter.sorting_parameters)
     kwargs = {**sorter.sorting_parameters}
     if sorter.algorithm == 'spykingcircus2':
         kwargs['job_kwargs'] = {'n_jobs': 10}
