@@ -14,6 +14,25 @@ def main():
             'id': 'mountainsort5',
             'type': 'spikeinterface',
             'algorithm': 'mountainsort5',
+            'sorting_parameters': {
+                'scheme2_phase1_detect_channel_radius': 150,
+                'scheme2_detect_channel_radius': 25
+            }
+        },
+        {
+            'id': 'mountainsort5_fl',
+            'type': 'spikeinterface',
+            'algorithm': 'mountainsort5',
+            'sorting_parameters': {
+                'detect_threshold': 5.5,
+                'scheme2_phase1_detect_channel_radius': 200,
+                'scheme2_detect_channel_radius': 80
+            }
+        },
+        {
+            'id': 'mountainsort4',
+            'type': 'spikeinterface',
+            'algorithm': 'mountainsort4',
             'sorting_parameters': {}
         },
         {
@@ -89,6 +108,71 @@ def main():
                 'recording': f'spikeforest.paired_kampff.{a}',
                 'sorter': b
             })
+    
+    ########################################
+    # franklab example
+    franklab_sorters = ['mountainsort5_fl']
+    recordings.append({
+        'id': 'franklab.example1',
+        'type': 'spyglass',
+        'parameters': {
+            'study_name': 'franklab',
+            'recording_name': 'example1',
+            'nwb_file': 'wilbur20210406.nwb',
+            'group_id': 1,
+            'start_frame': 0,
+            'end_frame': 18000000
+        },
+        'notes': ''
+    })
+    recordings.append({
+        'id': 'franklab.example2',
+        'type': 'spyglass',
+        'parameters': {
+            'study_name': 'franklab',
+            'recording_name': 'example1',
+            'nwb_file': 'wilbur20210406.nwb',
+            'group_id': 27,
+            'start_frame': 0,
+            'end_frame': 18000000
+        },
+        'notes': ''
+    })
+    recordings.append({
+        'id': 'franklab.example3',
+        'type': 'spyglass',
+        'parameters': {
+            'study_name': 'franklab',
+            'recording_name': 'example1',
+            'nwb_file': 'wilbur20210406.nwb',
+            'group_id': 27,
+            'start_frame': 0,
+            'end_frame': 18000000,
+            'num_channels': 32
+        },
+        'notes': ''
+    })
+    for b in franklab_sorters:
+        sortings.append({
+            'recording': 'franklab.example1',
+            'sorter': b
+        })
+        sortings.append({
+            'recording': 'franklab.example2',
+            'sorter': b
+        })
+        sortings.append({
+            'recording': 'franklab.example3',
+            'sorter': b
+        })
+    sortings.append({
+        'recording': 'franklab.example1',
+        'sorter': 'mountainsort4'
+    })
+    sortings.append({
+        'recording': 'franklab.example3',
+        'sorter': 'mountainsort4'
+    })
 
     config = {
         'recordings': recordings,

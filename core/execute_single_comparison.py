@@ -51,7 +51,7 @@ def execute_single_comparison(config: SpikeSortingTestsConfig, sorting1_config: 
         os.mkdir(f'{sorting1_folder}/comparisons')
     
     comparison_folder = f'{sorting1_folder}/comparisons/{sorter2.id}'
-    if os.path.exists(comparison_folder + '/comparison_info.json'):
+    if os.path.exists(comparison_folder + '/timestamp'):
         print('Comparison already exists. Skipping.')
         return
     

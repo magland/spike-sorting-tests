@@ -77,6 +77,37 @@ recordings:
     recording_name: c46
     study_name: paired_kampff
   type: spikeforest
+- id: franklab.example1
+  notes: ''
+  parameters:
+    end_frame: 18000000
+    group_id: 1
+    nwb_file: wilbur20210406.nwb
+    recording_name: example1
+    start_frame: 0
+    study_name: franklab
+  type: spyglass
+- id: franklab.example2
+  notes: ''
+  parameters:
+    end_frame: 18000000
+    group_id: 27
+    nwb_file: wilbur20210406.nwb
+    recording_name: example1
+    start_frame: 0
+    study_name: franklab
+  type: spyglass
+- id: franklab.example3
+  notes: ''
+  parameters:
+    end_frame: 18000000
+    group_id: 27
+    num_channels: 32
+    nwb_file: wilbur20210406.nwb
+    recording_name: example1
+    start_frame: 0
+    study_name: franklab
+  type: spyglass
 sorters:
 - algorithm: truth
   id: truth
@@ -84,6 +115,19 @@ sorters:
   type: truth
 - algorithm: mountainsort5
   id: mountainsort5
+  sorting_parameters:
+    scheme2_detect_channel_radius: 25
+    scheme2_phase1_detect_channel_radius: 150
+  type: spikeinterface
+- algorithm: mountainsort5
+  id: mountainsort5_fl
+  sorting_parameters:
+    detect_threshold: 5.5
+    scheme2_detect_channel_radius: 80
+    scheme2_phase1_detect_channel_radius: 200
+  type: spikeinterface
+- algorithm: mountainsort4
+  id: mountainsort4
   sorting_parameters: {}
   type: spikeinterface
 - algorithm: spykingcircus2
@@ -199,3 +243,13 @@ sortings:
   sorter: spykingcircus2
 - recording: spikeforest.paired_kampff.c46
   sorter: kilosort2_5
+- recording: franklab.example1
+  sorter: mountainsort5_fl
+- recording: franklab.example2
+  sorter: mountainsort5_fl
+- recording: franklab.example3
+  sorter: mountainsort5_fl
+- recording: franklab.example1
+  sorter: mountainsort4
+- recording: franklab.example3
+  sorter: mountainsort4
